@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="syntaxdefinition">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sinppet"/>
+				<xs:element ref="oerators"/>
+				<xs:element ref="keywords"/>
+				<xs:element ref="keywords2"/>
+				<xs:element ref="singlelinecomment"/>
+				<xs:element ref="mutilinecommentstart"/>
+				<xs:element ref="mutilinecommentend"/>
+				<xs:element ref="literals"/>
+				<xs:element ref="intendstart"/>
+				<xs:element ref="intendend"/>
+			</xs:sequence>
+			<xs:attribute name="hilighter" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="oerators">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="keywords">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="keywords2">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="singlelinecomment">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mutilinecommentstart">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mutilinecommentend">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="literals">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="intendstart">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="intendend">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="item" type="xs:string" />
+</xs:schema>

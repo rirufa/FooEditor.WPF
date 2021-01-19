@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title>検索と置き換え</title>
+	<link rel="stylesheet" type="text/css" href="HeadStyle2/css.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+</head>
+<body>
+	<h3 class="titlebar">検索と置き換え</h3>
+<LINK rel=stylesheet type=text/css href="HeadStyle2/css.css">
+<P>編集メニューから検索と置き換えを選ぶことで表示されるペインを使用してドキュメントの検索と置き換えをすることができます</P>
+<P><A href="http://msdn.microsoft.com/ja-jp/library/az24scfc%28VS.80%29.aspx">使用できる正規表現の種類</A></P>
+<P><A href="http://msdn.microsoft.com/ja-jp/library/ms972966.aspx">正規表現のチュートリアル</A></P>
+<H2>指定できるオプション</H2>
+<P>
+<TABLE border=1>
+<TBODY>
+<TR>
+<TD>大文字と小文字を区別しない</TD>
+<TD>Aとaを同じものとして検索します</TD></TR>
+<TR>
+<TD>置き換え時にグループ指定を行う</TD>
+<TD>グループ置き換え機能を使用できるようにします</TD></TR>
+<TR>
+<TD>正規表現を使用する</TD>
+<TD>検索する文字列に正規表現を使うことができるようにします</TD></TR></TBODY></TABLE></P>
+<H2>グループ置き換え機能について</H2>
+<P>正規表現で一致した部分をグループごとに取り込み、置き換えることができます。（置き換え時に使用できる表現については<A href="http://msdn.microsoft.com/ja-jp/library/ewy2t5e0%28v=VS.80%29.aspx">こちら</A>を参照してください）</P>
+<H3>例</H3>
+<TABLE border=1>
+<TBODY>
+<TR>
+<TD>検索する文字列</TD>
+<TD>置き換えする文字列</TD>
+<TD>動作</TD></TR>
+<TR>
+<TD>(?&lt;foo&gt;.+)@(?&lt;bar&gt;.+)</TD>
+<TD>$1|$2</TD>
+<TD>aaa@bbb が aaa|bbb になる</TD></TR></TBODY></TABLE>
+<H2>制限事項</H2>
+<P>比較時に正規化を行っている都合上、字体が違う文字であっても一致することがあります(ex.神と神など)</P>
+<P>また、行そのものをパターンと指定することはできますが、マッチしません<BR></P>
+<P></P>
+<br>
+<div class="footer">最終更新時刻：2013年7月11日<br>CopyRight:<br><a href=""><!--%WebPage%--></a></div>
+</body>
+</html>

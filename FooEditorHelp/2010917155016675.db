@@ -1,0 +1,7 @@
+[Info]
+Name=プラグイン
+KeyWord=プラグイン
+Context=IDH_HELP11
+[Date]
+<P>FooEditorではプラグインによる機能拡張をサポートしております。使用する際は実行ファイルがあるフォルダー\Pluginかユーザーごとの設定が存在するフォルダーに放り込んでください</P>
+<P>注１　ユーザーごとに設定が存在するフォルダーはVista以降なら[ユーザ名]\AppData\Roaming\FooEditorに、XPなら[ユーザー名]\Application Data\FooEditorになります</P>

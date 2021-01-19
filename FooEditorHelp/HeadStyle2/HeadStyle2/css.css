@@ -1,0 +1,36 @@
+/*header*/
+img.backnaviimg{
+	border: none;
+}
+
+img.nextnaviimg{
+	border: none;
+}
+
+/*Text*/
+div.nav
+{
+	text-align: right;
+}
+
+/* TopPageTitle */
+h3.titlebar {
+	padding: 6px 6px 7px 6px;
+	background: #B0C4DE;
+	vertical-align: top;
+	visibility: visible;
+	width: 100%;
+	border-bottom: 1px solid Black;
+	font-weight: bold;
+}
+
+.footer {
+	padding: 6px 6px 7px 6px;
+	background: #B0C4DE;
+	vertical-align: top;
+	visibility: visible;
+	width: 100%;
+	border-bottom: 1px solid Black;
+	font-weight: bold;
+	font-size: 80%;
+}

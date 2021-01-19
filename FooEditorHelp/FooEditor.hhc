@@ -1,0 +1,145 @@
+<html>
+<head>
+<title>FooEditorHelp</title>
+</head>
+<body>
+<OBJECT type="text/site properties">
+<param name="ImageType" value="Folder">
+<param name="Window Styles" value="0x800027">
+</OBJECT>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="概要">
+<param name="ImageNumber" value="9">
+<param name="Local" value="201091715244181.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="使い方">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="プラグイン">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917155016675.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="定型文の挿入">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917152829658.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="検索と置き換え">
+<param name="ImageNumber" value="9">
+<param name="Local" value="201091715271050.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="コマンドライン">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917152810465.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="入力補完">
+<param name="ImageNumber" value="9">
+<param name="Local" value="201091715322977.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="アウトライン解析">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917153222473.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="文章モード">
+<param name="ImageNumber" value="9">
+<param name="Local" value="20101122162656923.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="矩形編集">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2011103063659553.htm">
+</object>
+</UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="サポート">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917152931530.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="アンインストール">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917152920129.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ライセンス">
+<param name="ImageNumber" value="9">
+<param name="Local" value="20101120162046878.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="設定について">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ヘッダーとフッターの定義">
+<param name="ImageNumber" value="9">
+<param name="Local" value="201261716718544.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="定型文ファイルの定義">
+<param name="ImageNumber" value="9">
+<param name="Local" value="201147211954771.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="シンタックスハイライトの定義">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010917152736682.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="HKEY_CURRENT_USER">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="Software">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="FooEditor">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="項目">
+<param name="ImageNumber" value="9">
+<param name="Local" value="2010112216136443.htm">
+</object>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OutlineAnalyzePattern">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="項目">
+<param name="ImageNumber" value="9">
+<param name="Local" value="20101122162013571.htm">
+</object>
+</UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SytaxDefinition">
+<param name="ImageNumber" value="1">
+</object>
+<UL>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="項目">
+<param name="ImageNumber" value="9">
+<param name="Local" value="20101122162251939.htm">
+</object>
+</UL>
+</UL>
+</UL>
+</UL>
+</UL>
+</UL>
+</body>
+</html>

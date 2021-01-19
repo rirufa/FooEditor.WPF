@@ -1,0 +1,14 @@
+[Info]
+Name=メモ帳との違い
+KeyWord=メモ帳との違い
+Context=IDH_HELP26
+[Date]
+<P>FooEditorでは編集メニューの矩形選択モードを選び、キャレットを下に動かすことで０幅の矩形選択を行うことができます</P>
+<P><IMG src="Capture/RectSelect.png"></P>
+<P>この状態で文字を入力すると、選択領域の手前に文字が入力されます</P>
+<P><IMG src="Capture/RectSelectAndInputChar.png"></P>
+<P>バックスペースキーを押すと、1文字削除されます</P>
+<P><IMG src="Capture/RectSelectAndBackSpace.png"></P>
+<P>編集メニューのコピーを選ぶと矩形領域内にある文字がコピーされ、貼り付けを行うとコピーされた行に対応する文字列が各行に挿入されます</P>
+<p>矩形選択の幅が１文字以上ある状態で入力すると選択領域の文字はすべて置き換えられます</p>
+<P><IMG src="Capture/PasteAtRectSelectMode.png"></P>

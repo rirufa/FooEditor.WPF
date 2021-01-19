@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+  xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+
+  <!-- バージョンアップ時にはProductVersionとProductタグのId属性を更新すること -->
+  <?define UpgradeCode = "64175075-B742-45ED-8D02-7BCFA1C385B4"?>
+  <?define ProductVersion = "1.51.0.0"?>
+
+  <Product Name="FooEditor"
+           Id="4BADFEDF-2FAF-EFAB-9F52-CDFEF0C7FFB8"
+           UpgradeCode="$(var.UpgradeCode)"
+           Language="1041" Codepage="932"
+           Version="$(var.ProductVersion)" Manufacturer="FooProject">
+
+    <Package Id="*" Keywords="Installer"
+             Description="FooEditorインストーラー"
+             Comments="さまざまな言語に対応したテキストエディタです"
+             Manufacturer="FooProject" InstallerVersion="300"
+             Languages="1041" Compressed="yes" SummaryCodepage="932" />
+    <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
+
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="このアプリケーションを実行するには.NET Framework4.0が必要です">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="FooProject" Name="FooProject">
+          <Directory Id="INSTALLDIR" Name="FooEditor">
+
+              <Component Id="RegistryEntries" Guid="B8DAD322-9432-4767-A6AC-C551AE5D8677" KeyPath="yes">
+                 <RegistryKey Root="HKLM"
+                     Key="Software\Classes\FooEditor.Assoc\shell\open\command">
+                  <RegistryValue Type="expandable" Value="&quot;[INSTALLDIR]FooEditor.Exe&quot; -open &quot;%1&quot;"/>
+                </RegistryKey>
+                <RegistryKey Root="HKLM"
+                     Key="Software\FooEditor">
+                   <RegistryValue Type="string" Name="LocalizedString" Value="FooEditor"/>
+                </RegistryKey>
+                <RegistryKey Root="HKLM"
+                     Key="Software\FooEditor\Capabilities">
+                   <RegistryValue Type="string" Name="ApplicationDescription" Value="さまざまな言語に対応したテキストエディタです"/>
+                   <RegistryValue Type="string" Name="ApplicationName" Value="FooEditor"/>
+                </RegistryKey>
+                <RegistryKey Root="HKLM"
+                     Key="Software\FooEditor\Capabilities\FileAssociations">
+                   <RegistryValue Type="string" Name=".txt" Value="FooEditor.Assoc"/>
+                   <RegistryValue Type="string" Name=".log" Value="FooEditor.Assoc"/>
+                </RegistryKey>
+                <RegistryKey Root="HKLM"
+                     Key="Software\RegisteredApplications">
+                   <RegistryValue Type="string" Name="FooEditor" Value="Software\FooEditor\Capabilities"/>
+                </RegistryKey>
+             </Component>
+ 
+         </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="FooEditor">
+          <Component Id="ProgramMenuDir"
+                     Guid="BEF779B2-EC49-42B7-B3B4-9217D1DB0ACA">
+            <RemoveFolder Id="ProgramMenuDir" On="uninstall" />
+            <RegistryValue Root="HKCU"
+                           Key="Software\[Manufacturer]\[ProductName]"
+                           Type="string" Value='' KeyPath="yes" />
+            <Shortcut Id="startmenuFooEditor" Directory="ProgramMenuDir"
+                      Name="FooEditor" WorkingDirectory="INSTALLDIR" Target="[INSTALLDIR]FooEditor.exe"
+                      Icon="FooEditor.exe" IconIndex="0" Advertise="no"/>
+            <Shortcut Id="startmenuFooGrep" Directory="ProgramMenuDir"
+                      Name="FooGrep" WorkingDirectory="INSTALLDIR" Target="[INSTALLDIR]FooGrep.exe"
+                      Icon="FooGrep.exe" IconIndex="0" Advertise="no"/>
+          </Component>
+        </Directory>
+      </Directory>
+
+    </Directory>
+
+    <Feature Id="Complete" Title="FooEditor" Description="テキストファイルを編集するためのプログラム"
+      Display="expand" Level="1" ConfigurableDirectory="INSTALLDIR" AllowAdvertise="no">
+      <ComponentGroupRef Id="MainGroup" />
+      <ComponentRef Id="ProgramMenuDir" />
+      <ComponentRef Id="RegistryEntries" />
+    </Feature>
+
+    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <Icon Id="FooEditor.exe" SourceFile="dist\FooEditor.exe" />
+    <Icon Id="FooGrep.exe" SourceFile="dist\FooGrep.exe" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+    <Property Id="ARPHELPLINK">http://sourceforge.jp/projects/fooeditor/forums/</Property>
+    <Property Id="ARPURLINFOABOUT">http://sourceforge.jp/projects/fooeditor/</Property>
+
+    <InstallExecuteSequence>
+        <RemoveExistingProducts After="InstallInitialize"/>
+    </InstallExecuteSequence>
+
+    <Condition Message="[ProductName]の最新バージョンは既にインストールされています">
+      NOT NEWERVERSIONDETECTED OR Installed
+    </Condition>
+
+    <Upgrade Id="$(var.UpgradeCode)">
+        <UpgradeVersion Minimum="1.0.0"
+                        IncludeMinimum="yes"
+                        Maximum="$(var.ProductVersion)"
+                        Property="OLDERVERSIONBEINGUPGRADED" />
+        <UpgradeVersion Minimum="$(var.ProductVersion)"
+                        OnlyDetect="yes"
+                        Property="NEWERVERSIONDETECTED" />
+    </Upgrade>
+  </Product>
+</Wix>

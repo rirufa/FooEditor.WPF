@@ -1,0 +1,13 @@
+[Info]
+Name=定型文の挿入
+KeyWord=定型文の挿入
+Context=IDH_HELP5
+[Date]
+<LINK rel=stylesheet type=text/css href="HeadStyle2/css.css">
+<H2>定型文ダイアログ</H2>
+<P><IMG src="Capture/InsertSnippets.png"></P>
+<P>カテゴリーと挿入文を選択することで現在のカーソル位置に定型文を追加することができます 
+<H2>定型文の追加方法</H2>
+<P>「定型文ファイルの定義」に従い記述されたファイルを[インストールしたフォルダー or 設定ファイルがあるフォルダー]\sinppetsに放り込むだけで追加できます</P>
+<P>注１　設定ファイルがあるフォルダーはVista以降なら[ユーザ名]\AppData\Roaming\FooEditorに、XPなら[ユーザー名]\Application Data\FooEditorとなります</P>
+<P>注２　同じファイルがそれぞれのフォルダーにある場合、ユーザー側のファイルが優先されます</P>

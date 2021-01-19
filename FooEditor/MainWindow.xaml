@@ -1,0 +1,254 @@
+﻿<Window x:Class="FooEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:foo="clr-namespace:FooEditEngine.WPF;assembly=FooEditEngine.WPF"
+        xmlns:local="clr-namespace:FooEditor"
+        Title="FooEditor" Height="350" Width="525">
+    <Window.Resources>
+        <local:EncodingConverter x:Key="EncodingConverter" />
+        <local:LineFeedConverter x:Key="LineFeedConverter" />
+        <local:TextPointConverter x:Key="TextPointConverter" />
+        <local:HilightTypeConverter x:Key="HilightTypeConverter" />
+        <avalonDock:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:RateConverter x:Key="RateConverter"/>
+        <ContextMenu x:Key="ContextMenu">
+            <MenuItem Header="元に戻す" Command="ApplicationCommands.Undo"/>
+            <MenuItem Header="やり直す" Command="ApplicationCommands.Redo"/>
+            <Separator/>
+            <MenuItem Header="カット" Command="ApplicationCommands.Cut"/>
+            <MenuItem Header="コピー" Command="ApplicationCommands.Copy"/>
+            <MenuItem Header="貼り付け" Command="ApplicationCommands.Paste"/>
+            <Separator/>
+            <MenuItem Header="矩形選択を行う"
+                          Command="{x:Static foo:FooTextBoxCommands.ToggleRectSelectMode}"
+                          IsChecked="{Binding ActiveDocument.TextBox.RectSelectMode,Mode=OneWay}"
+                          IsCheckable="True"/>
+            <Separator/>
+            <MenuItem Header="右から左に表示する" IsCheckable="True" Command="{x:Static foo:FooTextBoxCommands.ToggleFlowDirection}">
+                <Style TargetType="MenuItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveDocument.TextBox.FlowDirection,Mode=OneWay}" Value="FlowDirection.LeftToRight">
+                            <Setter Property="IsChecked" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ActiveDocument.TextBox.FlowDirection,Mode=OneWay}" Value="FlowDirection.RightToLeft">
+                            <Setter Property="IsChecked" Value="True"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="検索" Command="ApplicationCommands.Find"/>
+            <MenuItem Header="置き換え" Command="ApplicationCommands.Replace"/>
+            <MenuItem Header="ジャンプ" Command="{x:Static local:FooEditorCommands.LineJump}"/>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="24"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="ファイル" Name="FileMenuItem">
+                <MenuItem Header="新規作成" Command="ApplicationCommands.New"/>
+                <MenuItem Header="開く" Command="ApplicationCommands.Open"/>
+                <Separator/>
+                <MenuItem Header="保存" Command="ApplicationCommands.Save"/>
+                <MenuItem Header="名前を付けて保存..." Command="ApplicationCommands.SaveAs"/>
+                <Separator/>
+                <MenuItem Header="最近使ったファイル" ItemsSource="{Binding RecentFiles}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding FileName}"/>
+                            <Setter Property="Command" Value="{x:Static local:FooEditorCommands.OpenRecentFile}"/>
+                            <Setter Property="CommandParameter" Value="{Binding FilePath}"/>
+                            <Setter Property="ToolTip" Value="{Binding FilePath}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="印刷..." Command="ApplicationCommands.Print" />
+                <Separator/>
+                <MenuItem Header="終了" Command="{x:Static local:FooEditorCommands.Quit}" />
+            </MenuItem>
+            <MenuItem Header="編集" Name="EditMenuItem">
+                <MenuItem Header="元に戻す" Command="ApplicationCommands.Undo"/>
+                <MenuItem Header="やり直す" Command="ApplicationCommands.Redo"/>
+                <Separator/>
+                <MenuItem Header="カット" Command="ApplicationCommands.Cut"/>
+                <MenuItem Header="コピー" Command="ApplicationCommands.Copy"/>
+                <MenuItem Header="貼り付け" Command="ApplicationCommands.Paste"/>
+                <Separator/>
+                <MenuItem Header="矩形選択を行う"
+                          Command="{x:Static foo:FooTextBoxCommands.ToggleRectSelectMode}"
+                          IsChecked="{Binding ActiveDocument.TextBox.RectSelectMode,Mode=OneWay}"
+                          IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="検索" Command="ApplicationCommands.Find"/>
+                <MenuItem Header="置き換え" Command="ApplicationCommands.Replace"/>
+                <MenuItem Header="ジャンプ" Command="{x:Static local:FooEditorCommands.LineJump}"/>
+            </MenuItem>
+            <MenuItem Header="表示" Name="LookMenuItem">
+                <MenuItem Header="折り畳みを生成する" Command="{x:Static local:FooEditorCommands.GenerateFolding}" />
+                <MenuItem Header="文章タイプ" ItemsSource="{Binding DocumentTypes}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Command" Value="{x:Static local:FooEditorCommands.SelectDocumentType}"/>
+                            <Setter Property="CommandParameter" Value="{Binding Name}"/>
+                            <Setter Property="IsChecked" Value="{Binding IsActive}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="ツール" Name="ToolMenuItem">
+                <MenuItem Header="Grep" Command="{x:Static local:FooEditorCommands.Grep}"/>
+                <Separator/>
+                <MenuItem Header="作業環境を保存する" Command="{x:Static local:FooEditorCommands.SaveWorkSpace}"/>
+                <Separator/>
+                <MenuItem Header="設定" Command="Properties"/>
+            </MenuItem>
+            <MenuItem Header="ヘルプ">
+                <MenuItem Header="ヘルプ" Command="Help" />
+                <MenuItem Header="バージョン情報" Command="{x:Static local:FooEditorCommands.About}" />
+            </MenuItem>
+        </Menu>
+        <avalonDock:DockingManager Grid.Row="1"
+                           DocumentsSource="{Binding Documents}"
+                           AnchorablesSource="{Binding Tools}"
+                           AllowDrop="True"
+                           Name="DockManager">
+            <avalonDock:DockingManager.LayoutItemContainerStyleSelector>
+                <local:PanesStyleSelector>
+                    <local:PanesStyleSelector.ToolStyle>
+                        <Style TargetType="{x:Type avalonDock:LayoutAnchorableItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}"/>
+                            <Setter Property="Visibility" Value="{Binding Model.IsActive,Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={x:Static Visibility.Hidden}}"/>
+                        </Style>
+                    </local:PanesStyleSelector.ToolStyle>
+                    <local:PanesStyleSelector.DocumentStyle>
+                        <Style TargetType="{x:Type avalonDock:LayoutItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title}"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Model.Dirty}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Title" Value="{Binding Model.Title,StringFormat='{}{0}*'}"/>
+                                    <Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Model.Dirty}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Title" Value="{Binding Model.Title}"/>
+                                    <Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </local:PanesStyleSelector.DocumentStyle>
+                </local:PanesStyleSelector>
+            </avalonDock:DockingManager.LayoutItemContainerStyleSelector>
+            <avalonDock:LayoutRoot>
+                <avalonDock:LayoutPanel Orientation="Horizontal">
+                    <avalonDock:LayoutAnchorablePane DockWidth="230"/>
+                    <avalonDock:LayoutDocumentPaneGroup x:Name="DocumentPanels">
+                        <avalonDock:LayoutDocumentPane/>
+                    </avalonDock:LayoutDocumentPaneGroup>
+                </avalonDock:LayoutPanel>
+            </avalonDock:LayoutRoot>
+        </avalonDock:DockingManager>
+        <StatusBar Grid.Row="2">
+            <StatusBarItem Content="{Binding ActiveDocument.TextBox.MagnificationPower,Converter={StaticResource ResourceKey=RateConverter}}"/>
+            <StatusBarItem Content="{Binding ActiveDocument.TextBox.CaretPostion,Converter={StaticResource ResourceKey=TextPointConverter}}"/>
+            <StatusBarItem Content="{Binding ActiveDocument.DocumentType,Converter={StaticResource ResourceKey=HilightTypeConverter}}" />
+            <StatusBarItem Content="{Binding ActiveDocument.LineFeed,Converter={StaticResource ResourceKey=LineFeedConverter}}"/>
+            <StatusBarItem Content="{Binding ActiveDocument.Encoding,Converter={StaticResource ResourceKey=EncodingConverter}}"/>
+            <StatusBarItem>
+                <StatusBarItem.Style>
+                    <Style TargetType="StatusBarItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ActiveDocument.TextBox.RectSelectMode}" Value="True">
+                                <Setter Property="Content" Value="矩形選択"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ActiveDocument.TextBox.RectSelectMode}" Value="False">
+                                <Setter Property="Content" Value="行選択"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StatusBarItem.Style>
+            </StatusBarItem>
+            <StatusBarItem>
+                <StatusBarItem.Style>
+                    <Style TargetType="StatusBarItem">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="Native, FullShape, Roman"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="あ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="Native, Katakana, FullShape, Roman"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="カ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="FullShape, Roman, Alphanumeric"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="Ａ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="Native, Katakana, Roman"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="ｶ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="Native, FullShape"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="あ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="Native, Katakana, FullShape"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="カ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="FullShape, Alphanumeric"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="Ａ"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition  Binding="{Binding ImeState}" Value="On"/>
+                                    <Condition  Binding="{Binding ImeConversionMode}" Value="Native, Katakana"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Content" Value="_ｶ"/>
+                            </MultiDataTrigger>
+                            <DataTrigger Binding="{Binding ImeState}" Value="Off">
+                                <Setter Property="Content" Value="_A"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StatusBarItem.Style>
+            </StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar Name="ProgressBar" Width="100" Height="16" Visibility="Collapsed"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

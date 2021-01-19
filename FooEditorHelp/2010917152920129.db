@@ -1,0 +1,17 @@
+[Info]
+Name=アンインストール
+KeyWord=アンインストール
+Context=IDH_HELP7
+[Date]
+<h2>インストラー版の場合</h2>
+<ol>
+<li>アンインストーラーで削除する</li>
+<li>%APPDATA%\FooEditorを削除する</li>
+<li>HKEY_CURRENT_USER\Software\fooEditorを削除する</li>
+</ol>
+<h2>zip版の場合</h2>
+<ol>
+<li>インストールしたフォルダーを削除する</li>
+<li>%APPDATA%\FooEditorを削除する</li>
+<li>HKEY_CURRENT_USER\Software\fooEditorを削除する</li>
+</ol>

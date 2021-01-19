@@ -1,0 +1,24 @@
+[Info]
+Name=コマンドライン
+KeyWord=コマンドライン
+Context=IDH_HELP4
+[Date]
+<LINK rel=stylesheet type=text/css href="HeadStyle2/css.css">
+<P>コマンドラインから実行した場合、以下のオプションを使用することができます。また、標準入力（パイプ）からの入力をサポートしてます</P>
+<P>FooEditor[args]</P>
+<P>
+<TABLE border=1>
+<TBODY>
+<TR>
+<TD>-open filepath</TD>
+<TD>新しいドキュメントしてファイルを開く</TD></TR>
+<TR>
+<TD>-new</TD>
+<TD>既に開いているエディタにたいし空のタブを作成するように指示する。-openとの併用は不可</TD></TR>
+<TR>
+<TD>-linejump 数字</TD>
+<TD>任意の行に移動する。-openした場合の動作は不定です</TD></TR>
+<TR>
+<TD>-openwithlinejump filepath 数字</TD>
+<TD>新しいドキュメントとしてファイルを開き、任意の行に移動する</TD></TR>
+</TBODY></TABLE></P><BR>

@@ -1,0 +1,49 @@
+[Info]
+Name=定型文ファイルの定義
+KeyWord=定型文ファイルの定義
+Context=IDH_HELP25
+[Date]
+<H2>ファイルフォーマット</H2>
+<DIV><PRE>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;sinppets&gt;
+	&lt;sinppet&gt;
+		&lt;name&gt;for&lt;/name&gt;
+		&lt;data&gt;for(; ; ;){}&lt;/data&gt;
+	&lt;/sinppet&gt;
+&lt;/sinppets&gt;
+</PRE></DIV>
+<TABLE border=1>
+<TBODY>
+<TR>
+<TD>name</TD>
+<TD>定型文の名称</TD>
+<TR>
+<TR>
+<TD>data</TD>
+<TD>定型文そのもの（ここで指定されたものが追加されます）</TD>
+<TR>
+<TR>
+<TD>sinppet</TD>
+<TD>定型文一塊分を表す（nameとdataを指定可能）</TD>
+<TR>
+<TR>
+<TD>sinppets</TD>
+<TD>ルートノード</TD>
+<TR></TR></TBODY></TABLE>
+<H2>dataタグで指定できるパラメータについて</H2>
+<P>dataタグで囲んだ部分の文字列には以下のパラメータを指定できます</P>
+<P>なお、タグで囲まれた文字列にあるタブと改行はすべて無視されるので、指定したいときは\tと\nを使用してください</P>
+<TABLE border=1>
+<TBODY>
+<TR>
+<TD>${encode}</TD>
+<TD>開いているファイルのWebエンコード名</TD></TR>
+<TR>
+<TD>\n</TD>
+<TD>改行</TD></TR>
+<TR>
+<TD>\t</TD>
+<TD>タブ</TD></TR>
+<TR>
+<TD>\i</TD>
+<TD>インテンドレベルに応じたタブを挿入する</TD></TR></TBODY></TABLE><BR>

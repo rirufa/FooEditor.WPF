@@ -1,0 +1,19 @@
+[Info]
+Name=ヘッダーとフッターの定義
+KeyWord=ヘッダーとフッターの定義
+Context=IDH_HELP27
+[Date]
+<H2>ヘッダーとフッターの定義</H2>
+<P>設定ダイアログの印刷タブでヘッダーとフッターを指定することができます</P>
+<H3>使用できる識別子</H3>
+<TABLE border=1>
+<TBODY>
+<TR>
+<TD>%f</TD>
+<TD>ファイル名</TD>
+</TR>
+<TR>
+<TD>%p</TD>
+<TD>ページ番号</TD>
+</TR>
+</TBODY></TABLE>

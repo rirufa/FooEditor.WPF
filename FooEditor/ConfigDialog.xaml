@@ -1,0 +1,410 @@
+﻿<Window x:Class="FooEditor.ConfigDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:FooEditor"
+        xmlns:cp="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:foo="clr-namespace:FooEditEngine;assembly=FooEditEngine.WPF"
+        Title="設定"
+        Width="420"
+        Height="480">
+    <Window.Resources>
+        <local:LineBreakMethodConverter x:Key="LineBreakMethodConverter"/>
+        <Style x:Key="NumberCheck" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"   
+                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="UnitStyle" TargetType="Label">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMetric}" Value="false">
+                    <Setter Property="Content" Value="インチ"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsMetric}" Value="true">
+                    <Setter Property="Content" Value="ミリ"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="TextAntialiasModes">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="foo:TextAntialiasMode" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Window.BindingGroup>
+        <BindingGroup Name="AccountBindings"/>
+    </Window.BindingGroup>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Right">
+            <Button Name="OK" Height="24" Content="OK" Width="80" Click="OK_Click"/>
+            <Button Name="Cancle" Height="24" Content="キャンセル" Width="80" Margin="10,0,0,0" Click="Cancle_Click"/>
+        </StackPanel>
+        <TabControl DockPanel.Dock="Top">
+            <TabItem Header="全般">
+                <TabItem.Content>
+                    <StackPanel Margin="5,5,5,5">
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">タブの幅</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                                <TextBox.Text>
+                                    <Binding Path="Config.TabStops" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                        <Binding.ValidationRules>
+                                            <ExceptionValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Row="1" Grid.Column="0">ファイル履歴の最大数</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                                <TextBox.Text>
+                                    <Binding Path="Config.RecentMaxCount" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                        <Binding.ValidationRules>
+                                            <ExceptionValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Row="2" Grid.Column="0">バックアップの世代数</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                                <TextBox.Text>
+                                    <Binding Path="Config.MaxBackupCount" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                        <Binding.ValidationRules>
+                                            <ExceptionValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Row="3" Grid.Column="0">自動保存の開始回数</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                                <TextBox.Text>
+                                    <Binding Path="Config.AutoSaveCount" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                        <Binding.ValidationRules>
+                                            <ExceptionValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Grid.Column="0"  Grid.Row="4">折り返しの方法</Label>
+                            <ComboBox Grid.Column="1"  Grid.Row="4" ItemsSource="{Binding LineBreakMethodCollecion}" SelectedItem="{Binding Config.LineBreakMethod, UpdateSourceTrigger=Explicit,BindingGroupName=AccountBindings}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource LineBreakMethodConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Label Grid.Row="5" Grid.Column="0">折り返しの文字数</Label>
+                            <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                                <TextBox.Text>
+                                    <Binding Path="Config.LineBreakCharCount" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                        <Binding.ValidationRules>
+                                            <ExceptionValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                        </Grid>
+                        <CheckBox IsChecked="{Binding Config.DrawLine, UpdateSourceTrigger=Explicit}">ラインマーカーを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.DrawRuler, UpdateSourceTrigger=Explicit}">ルーラーを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.DrawLineNumber, UpdateSourceTrigger=Explicit}">行番号を表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.UrlMark, UpdateSourceTrigger=Explicit}">URLに下線を引く</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.AutoIndent, UpdateSourceTrigger=Explicit}">オートインデントを行う</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.ShowHalfSpace, UpdateSourceTrigger=Explicit}">半角スペースを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.ShowFullSpace, UpdateSourceTrigger=Explicit}">全角スペースを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.ShowTab, UpdateSourceTrigger=Explicit}">タブを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.ShowLineBreak, UpdateSourceTrigger=Explicit}">改行マークを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.ShowFoundPattern,UpdateSourceTrigger=Explicit}">検索パターンを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding Config.IndentBySpace,UpdateSourceTrigger=Explicit}">タブでなくスペースで字下げを行う</CheckBox>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Header="印刷">
+                <TabItem.Content>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0">上の余白</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                            <TextBox.Text>
+                                <Binding Path="Config.TopSpace" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource UnitStyle}"/>
+                        <Label Grid.Row="1" Grid.Column="0">右の余白</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                            <TextBox.Text>
+                                <Binding Path="Config.RightSpace" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource UnitStyle}"/>
+                        <Label Grid.Row="2" Grid.Column="0">下の余白</Label>
+                        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                            <TextBox.Text>
+                                <Binding Path="Config.BottomSpace" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Row="2" Grid.Column="2" Style="{StaticResource UnitStyle}"/>
+                        <Label Grid.Row="3" Grid.Column="0">左の余白</Label>
+                        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource NumberCheck}">
+                            <TextBox.Text>
+                                <Binding Path="Config.LeftSpace" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Row="3" Grid.Column="2" Style="{StaticResource UnitStyle}"/>
+                        <Label Grid.Row="4" Grid.Column="0">ヘッダー</Label>
+                        <TextBox Grid.Row="4" Grid.Column="1">
+                            <TextBox.Text>
+                                <Binding Path="Config.Header" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Row="5" Grid.Column="0">フッター</Label>
+                        <TextBox Grid.Row="5" Grid.Column="1">
+                            <TextBox.Text>
+                                <Binding Path="Config.Footer" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Header="文章モード">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <DockPanel Grid.Column="0" Margin="0,0,5,0">
+                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                            <Button Name="AddSyntax" Content="追加" Width="50" Margin="0,0,5,0" Click="AddSyntax_Click"/>
+                            <Button Name="RemoveSyntax" Content="削除" Width="50" Click="RemoveSyntax_Click"/>
+                        </StackPanel>
+                        <ListBox Name="SyntaxNameList" DockPanel.Dock="Top"  DisplayMemberPath="Name">
+                            <ListBox.ItemsSource>
+                                <Binding Path="DocumentTypeCollection"/>
+                            </ListBox.ItemsSource>
+                        </ListBox>
+                    </DockPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <Label>ファイル名</Label>
+                        <TextBox Name="SyntaxFileName">
+                            <TextBox.Text>
+                                <Binding Path="SelectedItem.Name" ElementName="SyntaxNameList" Mode="TwoWay"/>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label>対象となる拡張子</Label>
+                        <TextBox Name="TargetExtension">
+                            <TextBox.Text>
+                                <Binding Path="SelectedItem.Extension" ElementName="SyntaxNameList" Mode="TwoWay"/>
+                            </TextBox.Text>
+                        </TextBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">全般の設定を使用しない</CheckBox>
+                        <Label Grid.Column="0"  Grid.Row="4">折り返しの方法</Label>
+                        <ComboBox Grid.Column="1"  Grid.Row="4" ItemsSource="{Binding LineBreakMethodCollecion}"
+                                  SelectedItem="{Binding SelectedItem.LineBreakMethod,ElementName=SyntaxNameList,BindingGroupName=AccountBindings}"
+                                  IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource LineBreakMethodConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Label Grid.Row="5" Grid.Column="0">折り返しの文字数</Label>
+                        <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource NumberCheck}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">
+                            <TextBox.Text>
+                                <Binding Path="SelectedItem.LineBreakCharCount" ElementName="SyntaxNameList" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Row="6" Grid.Column="0">タブの幅</Label>
+                        <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource NumberCheck}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">
+                            <TextBox.Text>
+                                <Binding Path="SelectedItem.TabStops" UpdateSourceTrigger="Explicit" ElementName="SyntaxNameList" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.IsDrawRuler,ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">ルーラーを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.IsDrawLineNumber,ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">行番号を表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.IsAutoIndent,ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">オートインデントを行う</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.ShowHalfSpace, ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">半角スペースを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.ShowFullSpace, ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">全角スペースを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.ShowTab, ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">タブを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.ShowLineBreak, ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">改行マークを表示する</CheckBox>
+                        <CheckBox IsChecked="{Binding SelectedItem.IndentBySpace, ElementName=SyntaxNameList}" IsEnabled="{Binding SelectedItem.NoInherit,ElementName=SyntaxNameList}">タブでなくスペースで字下げを行う</CheckBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="表示">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0">フォント名</Label>
+                        <ComboBox ItemsSource="{Binding FontCollection}" SelectedItem="{Binding Config.FontName, UpdateSourceTrigger=Explicit,BindingGroupName=AccountBindings}" Grid.Column="1"/>
+                        <Label Grid.Column="0" Grid.Row="1">フォントサイズ</Label>
+                        <TextBox Grid.Column="1"  Grid.Row="1" Style="{StaticResource NumberCheck}">
+                            <TextBox.Text>
+                                <Binding Path="Config.FontSize" UpdateSourceTrigger="Explicit" BindingGroupName="AccountBindings">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Label Grid.Column="0"  Grid.Row="2">レタリングモード</Label>
+                        <ComboBox Grid.Column="1"  Grid.Row="2" ItemsSource="{Binding Source={StaticResource TextAntialiasModes}}" SelectedItem="{Binding Config.TextAntialiasMode, UpdateSourceTrigger=Explicit,BindingGroupName=AccountBindings}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0">文字色</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="0" SelectedColor="{Binding Config.Fore, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="1">背景色</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="1" SelectedColor="{Binding Config.Back, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="2">キーワード１</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="2" SelectedColor="{Binding Config.Keyword1, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="3">キーワード２</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="3" SelectedColor="{Binding Config.Keyword2, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="4">コメント</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="4" SelectedColor="{Binding Config.Comment, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="5">リテラル</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="5" SelectedColor="{Binding Config.Literal, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="6">URL</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="6" SelectedColor="{Binding Config.URL, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="0" Grid.Row="7">行番号</Label>
+                        <cp:ColorPicker Grid.Column="1" Grid.Row="7" SelectedColor="{Binding Config.LineNumber, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="0">選択色</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="0" SelectedColor="{Binding Config.Hilight, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="1">コントロール</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="1" SelectedColor="{Binding Config.Control, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="2">キャレット(上書時)</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="2" SelectedColor="{Binding Config.OverwriteCaret, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="3">キャレット(挿入時)</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="3" SelectedColor="{Binding Config.InsetCaret, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="4">ラインマーカー</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="4" SelectedColor="{Binding Config.LineMarker, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="5">検索マーカー</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="5" SelectedColor="{Binding Config.FoundMarker, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                        <Label Grid.Column="2" Grid.Row="6">更新エリア</Label>
+                        <cp:ColorPicker Grid.Column="3" Grid.Row="6" SelectedColor="{Binding Config.UpdateArea, UpdateSourceTrigger=Explicit, BindingGroupName=AccountBindings}"/>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="プラグイン">
+                <DockPanel>
+                    <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom" >
+                        <Label Content="※反映させるには再起動が必要です" />
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Right">
+                            <Button Name="ConfigButton" Height="24" Content="設定" Width="80" Click="Config_Click"/>
+                            <Button Name="TogglePlugin" Height="24" Width="80" Margin="10,0,0,0" Click="TogglePlugin_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Setters>
+                                            <Setter Property="Content" Value="無効化"/>
+                                        </Style.Setters>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedItem.Version, ElementName=PluginList}" Value="">
+                                                <Setter Property="Content" Value="有効化"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <ListView Name="PluginList" DockPanel.Dock="Top">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Version}" Value="">
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="プラグイン名" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="バージョン" DisplayMemberBinding="{Binding Version}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

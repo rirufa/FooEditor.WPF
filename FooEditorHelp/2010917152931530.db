@@ -1,0 +1,8 @@
+[Info]
+Name=サポート
+KeyWord=サポート
+Context=IDH_HELP8
+[Date]
+<LINK rel=stylesheet type=text/css href="HeadStyle2/css.css">
+<P>最新版は<A href="http://sourceforge.jp/projects/fooeditor/">FooEditorプロジェクト</A>で公開しております</P>
+<P>制作にあたりテストはしておりますが、不具合が発生すること多々ございます。その際はFooEditorプロジェクトのチケットかフォーラムまでお願いします</P><BR>
